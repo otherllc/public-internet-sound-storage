@@ -14,6 +14,7 @@
   .controls { margin-top: 1em; display: flex; gap: .5em; }
   footer { margin-bottom: 1em; text-align: center; }
   #playerMessage { margin-top: .5em; text-align: center; }
+  #uploadCount { margin-top: 1em; }
 </style>
 </head>
 <body>
@@ -22,7 +23,6 @@
   <div style="margin-top:1em"><button id="uploadButton">choose file</button></div>
   <input id="fileInput" type="file" accept=".mp3,.wav,audio/mpeg,audio/wav" hidden>
   <div id="uploadCount"></div>
-  <div id="turnstile"></div>
 </header>
 <div class="middle">
   <div id="number">0</div>
@@ -41,9 +41,10 @@
 </div>
 <footer><a href="https://otherllc.com/">© 2026 other llc</a></footer>
 <audio id="audio" crossorigin="anonymous"></audio>
+<div id="turnstile"></div>
 <script>
-const API = 'https://piss-api.towbinr.workers.dev';
-const TURNSTILE_SITE_KEY = '0x4AAAAAAF3sJEXZ9P_ZjYtD';
+const API = 'https://piss-api.YOUR_WORKERS_SUBDOMAIN.workers.dev';
+const TURNSTILE_SITE_KEY = 'YOUR_TURNSTILE_SITE_KEY';
 
 let value = '', active = 0, busy = false, widgetId = null;
 let verificationWaiter = null;
@@ -131,6 +132,7 @@ window.onTurnstileLoaded = () => {
   widgetId = turnstile.render('#turnstile', {
     sitekey: TURNSTILE_SITE_KEY,
     execution: 'execute',
+    appearance: 'interaction-only',
     callback: token => { if (verificationWaiter) verificationWaiter.resolve(token); },
     'expired-callback': () => { if (verificationWaiter) verificationWaiter.reject(); },
     'error-callback': () => { if (verificationWaiter) verificationWaiter.reject(); }
