@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,7 @@
       <button onclick="add('4')">4</button><button onclick="add('5')">5</button><button onclick="add('6')">6</button>
       <button onclick="add('7')">7</button><button onclick="add('8')">8</button><button onclick="add('9')">9</button>
     </div>
-    <div class="zero"><button onclick="add('0')">0</button></div>
+    <div class="zero"><button onclick="add('0')">0</button><button onclick="backspace()" aria-label="backspace">del</button></div>
   </div>
   <div class="controls">
     <button id="prev">prev</button><button id="play">play</button><button id="next">next</button>
@@ -54,12 +55,13 @@ const audio = $('audio');
 function showNumber() { $('number').textContent = value || '0'; }
 function stop() { audio.pause(); audio.removeAttribute('src'); audio.load(); active = 0; $('play').textContent = 'play'; }
 function add(digit) { if (value.length >= 8) return; stop(); value = (value + digit).replace(/^0+(?=\d)/, ''); showNumber(); $('playerMessage').textContent = ''; }
+function backspace() { stop(); value = value.slice(0, -1); showNumber(); $('playerMessage').textContent = ''; }
 function setNumber(n) { stop(); value = n > 0 ? String(n) : ''; showNumber(); $('playerMessage').textContent = ''; }
 
 document.addEventListener('keydown', e => {
   if (e.ctrlKey || e.altKey || e.metaKey || e.target instanceof HTMLInputElement) return;
   if (/^\d$/.test(e.key)) add(e.key);
-  if (e.key === 'Backspace') { e.preventDefault(); stop(); value = value.slice(0, -1); showNumber(); }
+  if (e.key === 'Backspace') { e.preventDefault(); backspace(); }
   if (e.key === 'Escape') setNumber(0);
 });
 
